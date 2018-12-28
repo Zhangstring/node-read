@@ -6,18 +6,22 @@ router.get('/api/book/search', async (ctx, next) => {
 	let result = '';
 	let bookName = ctx.query.name;
 	if (bookName) {
-		let bookInfo = await book.findBook(bookName).then(res => {
-			return res;
-		});
-		if (bookInfo.length) {
-			result = bookInfo[0];
-			console.log('存在书籍');
-		} else {
-			console.log('开始下载');
-			book.addBook(bookName).then(() => {
-				console.log('search success');
+		try {
+			let bookInfo = await book.findBook(bookName).then(res => {
+				return res;
 			});
-			result = '开始下载';
+			if (bookInfo.length) {
+				result = bookInfo[0];
+				console.log('存在书籍');
+			} else {
+				console.log('开始下载');
+				book.addBook(bookName).then(() => {
+					console.log('search success');
+				});
+				result = '开始下载';
+			}
+		} catch (e) {
+			console.log(e);
 		}
 
 		ctx.body = {
