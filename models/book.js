@@ -45,12 +45,6 @@ async function getText(page, url) {
 		.evaluate(() => {
 			let data = document.querySelector('#content').innerHTML;
 			return data;
-		})
-		.then(() => {
-			console.log('获取章节内容成功');
-		})
-		.catch(err => {
-			console.log('获取章节内容失败', err);
 		});
 	return result;
 }
