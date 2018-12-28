@@ -6,24 +6,39 @@ const addBook = async name => {
 		return value;
 	});
 	// 将书名存入数据库中，返回id
-	let insertId = await mysql.setBook(name).then(res => {
-		console.log('书名写入数据库', res.insertId);
-		return res.insertId;
-	});
+	let insertId = await mysql
+		.setBook(name)
+		.then(res => {
+			console.log('书名写入数据库', res.insertId);
+			return res.insertId;
+		})
+		.catch(err => {
+			console.log('setBook', err);
+		});
 	// 将书章节存入数据库
 	for (let i = 0; i < value.length; i++) {
 		let section = value[i];
-		await mysql.setContent(insertId, section.title, section.content, section.downTime).then(res => {
-			console.log('success', res);
-		});
+		await mysql
+			.setContent(insertId, section.title, section.content, section.downTime)
+			.then(res => {
+				console.log('success', res);
+			})
+			.catch(err => {
+				console.log('setContent', err);
+			});
 	}
 	return;
 };
 // 查询数据库中是否存在该书籍
 const findBook = async name => {
-	let bookName = await mysql.findBook(name).then(res => {
-		return res;
-	});
+	let bookName = await mysql
+		.findBook(name)
+		.then(res => {
+			return res;
+		})
+		.catch(err => {
+			console.log('findBook', err);
+		});
 	return bookName;
 };
 module.exports = {
