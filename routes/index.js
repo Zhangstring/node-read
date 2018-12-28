@@ -9,8 +9,8 @@ router.get('/api/book/search', async (ctx, next) => {
 		let bookInfo = await book.findBook(bookName).then(res => {
 			return res;
 		});
-		if (bookInfo.book_id) {
-			result = bookInfo;
+		if (bookInfo.length) {
+			result = bookInfo[0];
 		} else {
 			console.log('开始下载');
 			book.addBook(bookName).then(() => {
