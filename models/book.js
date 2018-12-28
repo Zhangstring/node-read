@@ -31,14 +31,27 @@ async function getText(page, url) {
 	if (!url) {
 		return;
 	}
-	console.log('打开章节页面');
-	await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
-	console.log('获取章节内容');
-	const result = await page.evaluate(() => {
-		let data = document.querySelector('#content').innerHTML;
-		return data;
-	});
-	console.log('获取章节内容成功');
+	console.log('准备打开章节页面');
+	await page
+		.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
+		.then(() => {
+			console.log('打开章节页面成功');
+		})
+		.catch(err => {
+			console.log('打开章节页面失败', err);
+		});
+	console.log('准备获取章节内容');
+	const result = await page
+		.evaluate(() => {
+			let data = document.querySelector('#content').innerHTML;
+			return data;
+		})
+		.then(() => {
+			console.log('获取章节内容成功');
+		})
+		.catch(err => {
+			console.log('获取章节内容失败', err);
+		});
 	return result;
 }
 
