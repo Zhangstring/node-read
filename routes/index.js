@@ -11,12 +11,13 @@ router.get('/api/book/search', async (ctx, next) => {
 		});
 		if (bookInfo.length) {
 			result = bookInfo[0];
+			console.log('存在书籍');
 		} else {
 			console.log('开始下载');
 			book.addBook(bookName).then(() => {
 				console.log('search success');
 			});
-			result = '下载成功';
+			result = '开始下载';
 		}
 
 		ctx.body = {

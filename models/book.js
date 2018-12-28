@@ -32,23 +32,20 @@ async function getText(page, url) {
 		return;
 	}
 	console.log('准备打开章节页面');
-	await page
+	return await page
 		.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
 		.then(() => {
 			console.log('打开章节页面成功');
+			return page.evaluate(() => {
+				let data = document.querySelector('#content').innerHTML;
+				return data;
+			});
 		})
 		.catch(err => {
 			console.log('打开章节页面失败', err);
+			return '';
 		});
-	console.log('准备获取章节内容');
-	const result = await page
-		.evaluate(() => {
-			let data = document.querySelector('#content').innerHTML;
-			return data;
-		});
-	return result;
 }
-
 async function init(name) {
 	let startTime = +new Date();
 	const browser = await puppeteer.launch();
@@ -71,7 +68,7 @@ async function init(name) {
 	}
 	browser.close();
 	let runTime = (+new Date() - startTime) / 1000;
-	console.log('获取小说成功，共消耗' + runTime + 's');
+	await console.log('获取小说成功，共消耗' + runTime + 's');
 	return data;
 }
 module.exports = {
