@@ -31,18 +31,15 @@ async function getText(page, url) {
 	if (!url) {
 		return;
 	}
-	try {
-		await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
-		const result = await page.evaluate(() => {
-			let data = document.querySelector('#content').innerHTML;
-			return data;
-		});
-
-		return result;
-	} catch (e) {
-		console.log(e);
-		return '';
-	}
+	console.log('打开章节页面');
+	await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
+	console.log('获取章节内容');
+	const result = await page.evaluate(() => {
+		let data = document.querySelector('#content').innerHTML;
+		return data;
+	});
+	console.log('获取章节内容成功');
+	return result;
 }
 
 async function init(name) {
