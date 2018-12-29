@@ -8,6 +8,9 @@ router.get('/api/book/search', async (ctx, next) => {
 	process.on('unhandledRejection', err => {
 		console.log('unhandledRejection', err);
 	});
+	process.on('uncaughtException', err => {
+		console.log('uncaughtException', err);
+	});
 	if (bookName) {
 		let bookInfo = await book.findBook(bookName).then(res => {
 			return res;
