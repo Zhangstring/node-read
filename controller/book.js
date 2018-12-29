@@ -26,6 +26,7 @@ const addBook = async name => {
 			.catch(err => {
 				console.log('setContent', err);
 			});
+		
 	}
 	await mysql
 		.downSuccessBook(insertId)

@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-async function getBook(page, name) {
+async function getBook(browser, name) {
+	const page = await browser.newPage();
 	let bqgSearch = 'https://sou.xanbhx.com/search?siteid=qula&q=';
 	bqgSearch += name;
 	await page.goto(bqgSearch);
@@ -8,9 +9,11 @@ async function getBook(page, name) {
 		let bookName = document.querySelector('.search-list li:nth-of-type(2) .s2>a');
 		return bookName.href;
 	});
+	await page.close();
 	return result;
 }
-async function getTiTle(page, url) {
+async function getTiTle(browser, url) {
+	const page = await browser.newPage();
 	await page.goto(url);
 	const result = await page.evaluate(() => {
 		let titleElement = document.querySelectorAll('dd>a');
@@ -25,9 +28,11 @@ async function getTiTle(page, url) {
 		});
 		return data;
 	});
+	await page.close();
 	return result;
 }
-async function getText(page, url) {
+async function getText(browser, url) {
+	const page = await browser.newPage();
 	if (!url) {
 		return;
 	}
@@ -35,7 +40,7 @@ async function getText(page, url) {
 	page.on('error', err => {
 		console.log('error: ', err);
 	});
-	return await page
+	let content = await page
 		.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
 		.then(() => {
 			console.log('打开章节页面成功');
@@ -48,19 +53,22 @@ async function getText(page, url) {
 			console.log('打开章节页面失败', err);
 			return '';
 		});
+	await page.close();
+	return content;
 }
 async function init(name) {
 	let startTime = +new Date();
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
-	let nameURL = await getBook(page, name);
+	let nameURL = await getBook(browser, name);
 	console.log('小说地址', nameURL);
-	let title = await getTiTle(page, nameURL);
+	let title = await getTiTle(browser, nameURL);
 	console.log('获取目录成功');
 	let data = [];
 	for (let i = 0; i < title.length; i++) {
 		let sectionStartTime = +new Date();
-		let content = await getText(page, title[i].url);
+		let content = await getText(browser, title[i].url);
+
 		let downTime = (+new Date() - sectionStartTime) / 1000;
 		console.log(title[i].title, i / title.length, '本章用时' + downTime + 's');
 		data.push({
