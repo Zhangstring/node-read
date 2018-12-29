@@ -13,48 +13,56 @@ async function getBook(browser, name) {
 	return result;
 }
 async function getTiTle(browser, url) {
-	const page = await browser.newPage();
-	await page.goto(url);
-	const result = await page.evaluate(() => {
-		let titleElement = document.querySelectorAll('dd>a');
-		let data = [];
-		titleElement.forEach(item => {
-			let title = item.innerText;
-			let url = item.href;
-			data.push({
-				title,
-				url
+	try {
+		const page = await browser.newPage();
+		await page.goto(url);
+		const result = await page.evaluate(() => {
+			let titleElement = document.querySelectorAll('dd>a');
+			let data = [];
+			titleElement.forEach(item => {
+				let title = item.innerText;
+				let url = item.href;
+				data.push({
+					title,
+					url
+				});
 			});
+			return data;
 		});
-		return data;
-	});
-	await page.close();
-	return result;
+		await page.close();
+		return result;
+	} catch (e) {
+		console.log('getTiTle', e);
+	}
 }
 async function getText(browser, url) {
-	const page = await browser.newPage();
-	if (!url) {
-		return;
-	}
-	console.log('准备打开章节页面');
-	page.on('error', err => {
-		console.log('error: ', err);
-	});
-	let content = await page
-		.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
-		.then(() => {
-			console.log('打开章节页面成功');
-			return page.evaluate(() => {
-				let data = document.querySelector('#content').innerHTML;
-				return data;
-			});
-		})
-		.catch(err => {
-			console.log('打开章节页面失败', err);
-			return '';
+	try {
+		const page = await browser.newPage();
+		if (!url) {
+			return;
+		}
+		console.log('准备打开章节页面');
+		page.on('error', err => {
+			console.log('error: ', err);
 		});
-	await page.close();
-	return content;
+		let content = await page
+			.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
+			.then(() => {
+				console.log('打开章节页面成功');
+				return page.evaluate(() => {
+					let data = document.querySelector('#content').innerHTML;
+					return data;
+				});
+			})
+			.catch(err => {
+				console.log('打开章节页面失败', err);
+				return '';
+			});
+		await page.close();
+		return content;
+	} catch (error) {
+		console.log('getText', error);
+	}
 }
 async function init(name) {
 	let startTime = +new Date();
