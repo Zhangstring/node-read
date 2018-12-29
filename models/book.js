@@ -32,6 +32,9 @@ async function getText(page, url) {
 		return;
 	}
 	console.log('准备打开章节页面');
+	page.on('error', err => {
+		console.log('error: ', err);
+	});
 	return await page
 		.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
 		.then(() => {
