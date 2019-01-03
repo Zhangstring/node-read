@@ -18,15 +18,16 @@ const addBook = async name => {
 	// 将书章节存入数据库
 	for (let i = 0; i < value.length; i++) {
 		let section = value[i];
+		section.id = insertId
 		await mysql
-			.setContent(insertId, section.title, section.content, section.downTime)
+			.setContent(section)
 			.then(res => {
 				console.log('success', res);
 			})
 			.catch(err => {
 				console.log('setContent', err);
 			});
-		
+
 	}
 	await mysql
 		.downSuccessBook(insertId)

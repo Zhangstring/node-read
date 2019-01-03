@@ -82,7 +82,8 @@ async function init(name) {
 		data.push({
 			title: title[i].title,
 			content,
-			downTime
+			downTime,
+			url: title[i].url
 		});
 	}
 	browser.close();
