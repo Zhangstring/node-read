@@ -18,7 +18,7 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'https://github.com/Zhangstring/node-read.git',
       path : '/data/server/node-read',
-      'post-deploy' : 'cnpm install && pm2 reload ecosystem.config.js --env production'
+      'post-deploy' : 'cnpm install && pm2 reload ecosystem.config.js --env production',
     }
   }
 };
