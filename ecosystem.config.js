@@ -1,3 +1,4 @@
+// 初始化 pm2 deploy ecosystem.config.js production setup
 // 执行命令 pm2 deploy production exec "pm2 start app.js"
 module.exports = {
   apps : [{
