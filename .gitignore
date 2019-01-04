@@ -2,6 +2,9 @@
 node_modules
 /dist
 ecosystem.config.js
+current
+source
+shared
 
 # local env files
 .env.local
