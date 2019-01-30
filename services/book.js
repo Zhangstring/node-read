@@ -84,16 +84,16 @@ async function init(name) {
 	let title = await getTiTle(browser, nameURL);
 	console.log('获取目录成功');
 	let data = [];
-	for (let i = 0; i < title.length; i = i + 5) {
+	for (let i = 0; i < title.length; i = i + 10) {
 		// let content = await getText(browser, title[i].url);
 
-		let titleArry = title.slice(i, i + 5);
+		let titleArry = title.slice(i, i + 10);
 		let urlArry = [];
 		titleArry.forEach(item => {
 			urlArry.push(getText(browser, item));
 		});
-		await Promise.all(urlArry).then(data => {
-			data.push(data);
+		await Promise.all(urlArry).then(content => {
+			data.push(content);
 		});
 	}
 	browser.close();
@@ -118,6 +118,7 @@ const addBook = async name => {
 		return value;
 	});
 	// 将书章节存入数据库
+
 	for (let i = 0; i < value.length; i++) {
 		let section = value[i];
 		section.id = insertId;
