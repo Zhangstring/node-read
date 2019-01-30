@@ -1,4 +1,5 @@
 // 初始化 pm2 deploy ecosystem.config.js production setup
+// 服务器拉下git代码，并安装依赖 pm2 deploy production --force
 // 执行命令 pm2 deploy production exec "pm2 start app.js"
 module.exports = {
   apps : [{

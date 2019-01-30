@@ -42,6 +42,7 @@ async function getText(browser, title) {
 	try {
 		let sectionStartTime = +new Date();
 		const page = await browser.newPage();
+		console.log('title', title);
 		if (!title.url) {
 			return;
 		}
@@ -84,21 +85,21 @@ async function init(name) {
 	let title = await getTiTle(browser, nameURL);
 	console.log('获取目录成功');
 	let data = [];
-	for (let i = 0; i < title.length; i = i + 10) {
+	for (let i = 0; i < title.length; i = i + 5) {
 		// let content = await getText(browser, title[i].url);
 
-		let titleArry = title.slice(i, i + 10);
+		let titleArry = title.slice(i, i + 5);
 		let urlArry = [];
 		titleArry.forEach(item => {
 			urlArry.push(getText(browser, item));
 		});
 		await Promise.all(urlArry).then(content => {
-			data.push(content);
+			data.push(...content);
 		});
 	}
 	browser.close();
 	let runTime = (+new Date() - startTime) / 1000;
-	await console.log('获取小说成功，共消耗' + runTime + 's');
+	console.log('获取小说成功，共消耗' + runTime + 's');
 	return data;
 }
 
